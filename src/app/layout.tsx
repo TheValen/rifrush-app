@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import LanguageSwitcher from './LanguageSwitcher' // новый клиентский компонент
+import Link from 'next/link'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,7 +18,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <LanguageSwitcher />
+        <div className="fixed top-4 right-4 z-10 flex gap-2">
+          <Link href="/" locale="en" className="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-md text-sm font-medium hover:bg-white transition">
+            EN
+          </Link>
+          <Link href="/ru" locale="ru" className="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-md text-sm font-medium hover:bg-white transition">
+            RU
+          </Link>
+        </div>
         {children}
       </body>
     </html>
