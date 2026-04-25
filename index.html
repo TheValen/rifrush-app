@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PriceDropWest — Amazon Price Drop Alerts in Telegram</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .hero-bg { background: linear-gradient(135deg, #0f172a 0%, #1e2937 100%); }
+  </style>
+</head>
+<body class="bg-zinc-950 text-zinc-200">
+
+  <!-- Navbar -->
+  <nav class="border-b border-zinc-800 bg-zinc-950 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-5 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-tag text-2xl text-emerald-500"></i>
+        <span class="text-2xl font-bold tracking-tight">PriceDropWest</span>
+      </div>
+      <a href="https://t.me/PriceDropWest_bot" target="_blank"
+         class="bg-emerald-600 hover:bg-emerald-500 px-6 py-2.5 rounded-xl font-medium transition flex items-center gap-2">
+        <i class="fa-brands fa-telegram"></i>
+        Open Bot
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero-bg py-24">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <div class="inline-flex items-center gap-2 bg-zinc-900 border border-zinc-700 rounded-full px-5 py-2 mb-8">
+        <span class="text-emerald-400 text-sm font-medium">Amazon US • UK • Germany • France</span>
+      </div>
+      
+      <h1 class="text-5xl md:text-6xl font-bold tracking-tighter leading-none mb-6">
+        Never miss an Amazon price drop again
+      </h1>
+      
+      <p class="text-2xl text-zinc-300 max-w-2xl mx-auto mb-10">
+        Simple Telegram bot that watches your products and instantly notifies you when the price drops.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="https://t.me/PriceDropWest_bot" target="_blank"
+           class="bg-white text-zinc-950 hover:bg-zinc-100 px-10 py-4 rounded-2xl font-semibold text-lg flex items-center justify-center gap-3 transition">
+          <i class="fa-brands fa-telegram text-xl"></i>
+          Start for Free in Telegram
+        </a>
+      </div>
+      
+      <p class="text-zinc-500 text-sm mt-8">No credit card required • 5 products free forever</p>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="py-20 bg-zinc-900">
+    <div class="max-w-5xl mx-auto px-6">
+      <h2 class="text-4xl font-bold text-center mb-12">How it works in 3 steps</h2>
+      <div class="grid md:grid-cols-3 gap-10">
+        <div class="text-center">
+          <div class="w-16 h-16 mx-auto bg-emerald-900/50 rounded-2xl flex items-center justify-center text-3xl mb-6">1️⃣</div>
+          <h3 class="text-2xl font-semibold mb-3">Add any Amazon link</h3>
+          <p class="text-zinc-400">Paste or forward the product URL from Amazon US, UK, Germany or France into the bot.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 mx-auto bg-emerald-900/50 rounded-2xl flex items-center justify-center text-3xl mb-6">2️⃣</div>
+          <h3 class="text-2xl font-semibold mb-3">Set your alert</h3>
+          <p class="text-zinc-400">Choose any price drop or set your target price. Free tier available instantly.</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 mx-auto bg-emerald-900/50 rounded-2xl flex items-center justify-center text-3xl mb-6">3️⃣</div>
+          <h3 class="text-2xl font-semibold mb-3">Receive instant alerts</h3>
+          <p class="text-zinc-400">Get clean Telegram notifications with direct link when the price drops. No spam.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="py-20">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold mb-4">Simple pricing that pays for itself</h2>
+        <p class="text-zinc-400 text-lg">One good deal usually covers the subscription for months.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <!-- Free -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8">
+          <h3 class="text-2xl font-semibold mb-2">Free</h3>
+          <div class="text-5xl font-bold mb-6">$0<span class="text-base font-normal text-zinc-400">/month</span></div>
+          <ul class="space-y-4 text-zinc-300 mb-10">
+            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> Up to 5 products</li>
+            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> Price checks every 4 hours</li>
+            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> Basic drop alerts</li>
+          </ul>
+          <a href="https://t.me/PriceDropWest_bot" target="_blank"
+             class="block text-center border border-zinc-700 hover:border-zinc-500 py-4 rounded-2xl font-medium transition">
+            Start Free
+          </a>
+        </div>
+
+        <!-- Pro (highlighted) -->
+        <div class="bg-gradient-to-b from-emerald-950 to-zinc-900 border border-emerald-600 rounded-3xl p-8 relative scale-105 shadow-2xl">
+          <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-emerald-600 text-white text-xs font-bold px-6 py-1 rounded-full">MOST POPULAR</div>
+          <h3 class="text-2xl font-semibold mb-2">Pro</h3>
+          <div class="text-5xl font-bold mb-6">$4.99<span class="text-base font-normal text-zinc-400">/month</span></div>
+          <ul class="space-y-4 text-zinc-300 mb-10">
+            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> Up to 50 products</li>
+            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> Checks every 30–60 minutes</li>
+            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> Faster and more reliable alerts</li>
+            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> Priority support</li>
+          </ul>
+          <a href="https://t.me/PriceDropWest_bot" target="_blank"
+             class="block text-center bg-emerald-600 hover:bg-emerald-500 py-4 rounded-2xl font-semibold transition">
+            Upgrade to Pro — $4.99/mo
+          </a>
+        </div>
+
+        <!-- Unlimited -->
+        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8">
+          <h3 class="text-2xl font-semibold mb-2">Unlimited</h3>
+          <div class="text-5xl font-bold mb-6">$9.99<span class="text-base font-normal text-zinc-400">/month</span></div>
+          <ul class="space-y-4 text-zinc-300 mb-10">
+            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> Unlimited products</li>
+            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> Fastest price checks</li>
+            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> Screenshot alerts + price history</li>
+            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-emerald-500 mt-1"></i> All Pro features + more</li>
+          </ul>
+          <a href="https://t.me/PriceDropWest_bot" target="_blank"
+             class="block text-center border border-zinc-700 hover:border-zinc-500 py-4 rounded-2xl font-medium transition">
+            Go Unlimited — $9.99/mo
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="py-20 bg-zinc-900">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold mb-10">What early users are saying</h2>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-zinc-800 p-8 rounded-3xl text-left">
+          <p class="text-zinc-300 italic mb-6">"Found a $142 drop on a Dyson vacuum within the first 4 days. This bot already paid for itself many times over."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-zinc-700 rounded-full"></div>
+            <div>
+              <div class="font-medium">Emily R.</div>
+              <div class="text-zinc-500 text-sm">United States • Pro user</div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-zinc-800 p-8 rounded-3xl text-left">
+          <p class="text-zinc-300 italic mb-6">"I track 35 items now. The alerts come exactly when the price drops. Finally stopped wasting time checking Amazon every day."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-zinc-700 rounded-full"></div>
+            <div>
+              <div class="font-medium">James Thompson</div>
+              <div class="text-zinc-500 text-sm">United Kingdom</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-20 max-w-3xl mx-auto px-6">
+    <h2 class="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+    <div class="space-y-8">
+      <div>
+        <h4 class="font-semibold mb-2">Which Amazon stores are supported?</h4>
+        <p class="text-zinc-400">Amazon United States, United Kingdom, Germany and France right now. More countries will be added soon.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-2">Is it safe? Do you store my data?</h4>
+        <p class="text-zinc-400">We only store the Amazon links you add and your Telegram ID. Payment processing is handled securely by Stripe.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-2">Can I cancel my subscription anytime?</h4>
+        <p class="text-zinc-400">Yes, you can cancel anytime directly in the bot or through Stripe. No questions asked.</p>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-2">How fast are the price checks?</h4>
+        <p class="text-zinc-400">Free: every 4 hours. Pro: every 30–60 minutes. Unlimited: even faster.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="py-20 border-t border-zinc-800 bg-zinc-950">
+    <div class="max-w-2xl mx-auto text-center px-6">
+      <h2 class="text-4xl font-bold mb-6">Ready to save money on Amazon?</h2>
+      <p class="text-xl text-zinc-400 mb-10">Join hundreds of smart shoppers who no longer overpay.</p>
+      <a href="https://t.me/PriceDropWest_bot" target="_blank"
+         class="inline-flex items-center gap-4 bg-emerald-600 hover:bg-emerald-500 text-white px-12 py-5 rounded-3xl text-xl font-semibold transition">
+        <i class="fa-brands fa-telegram text-2xl"></i>
+        Launch PriceDropWest Bot
+      </a>
+      <p class="text-zinc-500 mt-8">Takes less than 20 seconds • Free tier available immediately</p>
+    </div>
+  </section>
+
+  <footer class="py-10 text-center text-zinc-500 text-sm border-t border-zinc-800">
+    © 2026 PriceDropWest • Hosted on <a href="https://rifrush.app" class="hover:text-zinc-300">rifrush.app</a><br>
+    All rights reserved.
+  </footer>
+
+</body>
+</html>
