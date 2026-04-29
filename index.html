@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Rifrush — On-Chain Wallet Tracker & Whale Alert Bot</title>
+  <meta name="description" content="Track any crypto wallet on ETH, SOL, BSC and Base. Get instant Telegram alerts when whales, insiders or your watched wallets move funds. Free to start.">
+  <meta name="keywords" content="wallet tracker, whale alert, on-chain tracker, telegram crypto bot, ethereum wallet monitor, solana wallet alerts">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://rifrush.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://rifrush.app/">
+  <meta property="og:title" content="Rifrush — On-Chain Wallet Tracker">
+  <meta property="og:description" content="Instant Telegram alerts when whales and insiders move. Track any wallet on ETH, SOL, BSC, Base.">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23080808'/><circle cx='16' cy='16' r='8' fill='none' stroke='%2300ff88' stroke-width='2'/><circle cx='16' cy='16' r='3' fill='%2300ff88'/></svg>">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Rifrush","description":"On-chain wallet tracker and whale alert Telegram bot.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"url":"https://rifrush.app"}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#080808;--bg2:#0d0d0d;--bg3:#111;--line:rgba(255,255,255,0.06);--line2:rgba(255,255,255,0.1);--green:#00ff88;--green-glow:rgba(0,255,136,0.25);--red:#ff4444;--amber:#ffaa00;--text:#f0f0f0;--muted:#666;--muted2:#444;--mono:'Space Mono',monospace;--display:'Bebas Neue',sans-serif;--body:'DM Sans',sans-serif}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--body);background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;cursor:crosshair}
+    body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);pointer-events:none;z-index:999}
+    .grid-bg{position:fixed;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
+    .grid-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,255,136,0.04) 0%,transparent 70%)}
+    .wrap{max-width:1140px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
+
+    /* NAV */
+    nav{position:sticky;top:0;z-index:100;border-bottom:1px solid var(--line2);background:rgba(8,8,8,0.93);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;max-width:1140px;margin:0 auto}
+    .logo{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--text);text-decoration:none}
+    .logo em{font-style:normal;color:var(--green)}
+    .logo-tag{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;display:block;margin-top:-2px}
+    .nav-right{display:flex;align-items:center;gap:20px}
+    .nav-live{font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px}
+    .nav-live .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.5s infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+    .nav-cta{font-family:var(--mono);font-size:12px;font-weight:700;color:#000;background:var(--green);padding:10px 20px;text-decoration:none;letter-spacing:.5px;transition:background .15s,transform .1s;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
+    .nav-cta:hover{background:#00ffaa;transform:translateY(-1px)}
+
+    /* HERO */
+    .hero{padding:80px 0 60px;border-bottom:1px solid var(--line2)}
+    .hero-inner{display:grid;grid-template-columns:1fr 420px;gap:60px;align-items:center}
+    .hero-label{font-family:var(--mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--green);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+    .hero-label::before{content:'';width:24px;height:1px;background:var(--green)}
+    h1{font-family:var(--display);font-size:clamp(64px,9vw,120px);line-height:.92;letter-spacing:1px;color:var(--text);margin-bottom:28px}
+    h1 .acc{color:var(--green);display:block}
+    .hero-sub{font-size:17px;color:var(--muted);line-height:1.7;max-width:480px;margin-bottom:36px;font-weight:300}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+    .btn-primary{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-weight:700;font-size:13px;color:#000;background:var(--green);padding:16px 28px;text-decoration:none;letter-spacing:.5px;transition:all .15s;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));box-shadow:0 0 40px var(--green-glow)}
+    .btn-primary:hover{background:#00ffaa;box-shadow:0 0 60px var(--green-glow);transform:translateY(-2px)}
+    .btn-ghost{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--muted);padding:16px 24px;text-decoration:none;letter-spacing:.5px;border:1px solid var(--line2);transition:all .15s}
+    .btn-ghost:hover{color:var(--text);border-color:var(--green)}
+    .hero-note{font-family:var(--mono);font-size:10px;color:var(--muted2);margin-top:20px;letter-spacing:1px}
+    .hero-note span{color:var(--muted)}
+
+    /* TERMINAL */
+    .terminal{background:var(--bg2);border:1px solid var(--line2);position:relative;overflow:hidden}
+    .terminal::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,255,136,0.03) 0%,transparent 60%);pointer-events:none}
+    .term-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line2);background:rgba(255,255,255,0.02)}
+    .term-dot{width:8px;height:8px;border-radius:50%}
+    .term-title{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-left:4px}
+    .term-live{font-family:var(--mono);font-size:9px;color:var(--green);margin-left:auto;letter-spacing:2px;animation:blink 1.5s infinite}
+    .term-body{padding:14px}
+    .term-row{display:grid;grid-template-columns:76px 1fr auto;gap:8px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line);opacity:0;animation:slideIn .4s ease forwards}
+    .term-row:last-child{border-bottom:none}
+    @keyframes slideIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+    .term-row:nth-child(1){animation-delay:.3s}.term-row:nth-child(2){animation-delay:.6s}.term-row:nth-child(3){animation-delay:.9s}.term-row:nth-child(4){animation-delay:1.2s}.term-row:nth-child(5){animation-delay:1.5s}
+    .term-time{font-family:var(--mono);font-size:10px;color:var(--muted2)}
+    .term-event{font-family:var(--mono);font-size:11px;color:var(--text)}
+    .term-event .addr{color:var(--muted);font-size:10px;display:block;margin-top:1px}
+    .term-amount{font-family:var(--mono);font-size:12px;font-weight:700;text-align:right}
+    .term-amount.buy{color:var(--green)}.term-amount.sell{color:var(--red)}.term-amount.move{color:var(--amber)}
+    .cb{font-size:9px;padding:1px 5px;border:1px solid;letter-spacing:1px;font-family:var(--mono)}
+    .eth{border-color:#627eea;color:#627eea}.sol{border-color:#9945ff;color:#9945ff}.bsc{border-color:#f0b90b;color:#f0b90b}.base{border-color:#0052ff;color:#0052ff}
+    .term-footer{border-top:1px solid var(--line2);padding:10px 14px;display:flex;justify-content:space-between}
+    .term-stat{font-family:var(--mono);font-size:10px;color:var(--muted)}
+    .term-stat span{color:var(--green)}
+
+    /* TICKER */
+    .ticker{border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:10px 0;overflow:hidden;background:rgba(0,255,136,0.02)}
+    .ticker-inner{display:flex;gap:60px;animation:scroll 25s linear infinite;white-space:nowrap;width:max-content}
+    @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    .ti{font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;flex-shrink:0}
+    .ti .v{color:var(--text)}.ti .u{color:var(--green)}.ti .d{color:var(--red)}
+
+    /* PAIN SECTION */
+    .pain{padding:80px 0;border-bottom:1px solid var(--line2)}
+    .pain-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line2);border:1px solid var(--line2);margin-top:50px}
+    .pain-card{background:var(--bg);padding:32px 28px}
+    .pain-card.bad{border-left:3px solid var(--red)}
+    .pain-card.good{border-left:3px solid var(--green)}
+    .pain-label{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px}
+    .pain-label.red{color:var(--red)}.pain-label.grn{color:var(--green)}
+    .pain-item{font-size:14px;color:var(--muted);padding:10px 0;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:10px;line-height:1.5}
+    .pain-item:last-child{border-bottom:none}
+    .pain-item .ic{flex-shrink:0}
+    .feat-plan{display:inline-block;font-family:var(--mono);font-size:9px;padding:2px 8px;letter-spacing:1px;margin-top:6px;margin-left:4px}
+    .fp-hunter{background:rgba(0,255,136,0.08);color:var(--green);border:1px solid rgba(0,255,136,.2)}
+    .fp-apex{background:rgba(255,170,0,0.08);color:var(--amber);border:1px solid rgba(255,170,0,.2)}
+    .plan-btn-amber{color:#000;background:var(--amber)}
+    .plan-btn-amber:hover{background:#ffc533}
+    .plan-features li.apex-only{color:var(--amber)}
+    .plan-features li.apex-only::before{color:var(--amber)}
+    @media(max-width:900px){.pain-grid{grid-template-columns:1fr}}
+    /* FEATURES */
+    .features{padding:80px 0;border-bottom:1px solid var(--line2)}
+    .eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--green);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+    .eyebrow::before{content:'//';color:var(--muted2)}
+    .section-title{font-family:var(--display);font-size:clamp(40px,6vw,72px);line-height:.95;letter-spacing:1px;margin-bottom:60px}
+    .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line2);border:1px solid var(--line2)}
+    .feat{background:var(--bg);padding:32px 28px;position:relative;overflow:hidden;transition:background .2s}
+    .feat:hover{background:var(--bg3)}
+    .feat::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--green);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+    .feat:hover::after{transform:scaleX(1)}
+    .feat-num{font-family:var(--mono);font-size:10px;color:var(--muted2);letter-spacing:2px;margin-bottom:20px}
+    .feat-icon{font-size:28px;margin-bottom:16px;display:block}
+    .feat-title{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--text);margin-bottom:10px}
+    .feat-desc{font-size:14px;color:var(--muted);line-height:1.6}
+    .feat-tag{display:inline-block;font-family:var(--mono);font-size:9px;color:var(--green);border:1px solid rgba(0,255,136,.3);padding:2px 8px;letter-spacing:1px;margin-top:14px}
+
+    /* HOW */
+    .how{padding:80px 0;border-bottom:1px solid var(--line2)}
+    .how-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+    .steps{margin-top:40px}
+    .step{display:flex;gap:20px;padding:20px 0;border-bottom:1px solid var(--line)}
+    .step:last-child{border-bottom:none}
+    .step-num{font-family:var(--display);font-size:48px;line-height:1;color:var(--muted2);flex-shrink:0;width:52px;transition:color .2s}
+    .step:hover .step-num{color:var(--green)}
+    .step-title{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
+    .step-desc{font-size:14px;color:var(--muted);line-height:1.6}
+
+    /* ALERTS */
+    .alert-card{background:var(--bg2);border:1px solid var(--line2);padding:16px 18px;position:relative;overflow:hidden;margin-bottom:8px}
+    .alert-card.main{border-color:rgba(0,255,136,.3)}
+    .alert-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+    .alert-card.buy::before{background:var(--green)}.alert-card.sell::before{background:var(--red)}.alert-card.move::before{background:var(--amber)}
+    .alert-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+    .alert-type{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase}
+    .alert-type.buy{color:var(--green)}.alert-type.sell{color:var(--red)}.alert-type.move{color:var(--amber)}
+    .alert-time{font-family:var(--mono);font-size:10px;color:var(--muted2)}
+    .alert-wallet{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+    .alert-wallet .lbl{font-size:9px;background:rgba(0,255,136,.1);color:var(--green);padding:1px 6px;letter-spacing:1px}
+    .alert-amount{font-family:var(--mono);font-size:22px;font-weight:700;margin-bottom:4px}
+    .alert-amount.buy{color:var(--green)}.alert-amount.sell{color:var(--red)}.alert-amount.move{color:var(--amber)}
+    .alert-sub{font-family:var(--mono);font-size:11px;color:var(--muted)}
+    .alert-btn{display:block;text-align:center;font-family:var(--mono);font-size:11px;font-weight:700;color:#000;background:var(--green);padding:10px;margin-top:12px;text-decoration:none;letter-spacing:1px;transition:background .15s}
+    .alert-btn:hover{background:#00ffaa}
+    .alert-signal{font-family:var(--mono);font-size:10px;margin-top:8px;padding:4px 10px;display:inline-block}
+    .alert-signal.accumulate{background:rgba(0,255,136,0.1);color:var(--green)}
+    .alert-signal.exit{background:rgba(255,68,68,0.1);color:var(--red)}
+    .dimmed{opacity:.4;transform:scale(.97)}
+
+    /* CHAINS */
+    .chains{padding:60px 0;border-bottom:1px solid var(--line2)}
+    .chains-label{font-family:var(--mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:32px}
+    .chain-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line2);border:1px solid var(--line2)}
+    .chain-card{background:var(--bg);padding:28px 20px;text-align:center;transition:background .2s}
+    .chain-card:hover{background:var(--bg3)}
+    .chain-logo{font-size:32px;margin-bottom:12px}
+    .chain-name{font-family:var(--mono);font-size:13px;font-weight:700;margin-bottom:4px}
+    .chain-stat{font-family:var(--mono);font-size:10px;color:var(--muted)}
+
+    /* PRICING */
+    .pricing{padding:80px 0;border-bottom:1px solid var(--line2)}
+    .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line2);border:1px solid var(--line2);margin-top:50px}
+    .plan{background:var(--bg);padding:36px 28px;position:relative}
+    .plan.featured{background:var(--bg3)}
+    .plan-tag{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);display:block;margin-bottom:20px}
+    .plan-name{font-family:var(--display);font-size:42px;line-height:1;color:var(--text);margin-bottom:6px}
+    .plan-price{font-family:var(--mono);font-size:36px;font-weight:700;color:var(--green);margin-bottom:4px}
+    .plan-price .per{font-size:12px;color:var(--muted);font-weight:400}
+    .plan-note{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:28px}
+    .plan-divider{height:1px;background:var(--line2);margin-bottom:24px}
+    .plan-features{list-style:none;margin-bottom:32px}
+    .plan-features li{font-family:var(--mono);font-size:12px;color:var(--muted);padding:7px 0;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:10px}
+    .plan-features li::before{content:'>';color:var(--green);flex-shrink:0}
+    .plan-features li strong{color:var(--text)}
+    .plan-features li:last-child{border-bottom:none}
+    .plan-btn{display:block;text-align:center;font-family:var(--mono);font-size:12px;font-weight:700;padding:14px;text-decoration:none;letter-spacing:1px;transition:all .15s}
+    .plan-btn-solid{color:#000;background:var(--green);box-shadow:0 0 30px var(--green-glow)}
+    .plan-btn-solid:hover{background:#00ffaa}
+    .plan-btn-outline{color:var(--muted);border:1px solid var(--line2)}
+    .plan-btn-outline:hover{color:var(--text);border-color:var(--green)}
+
+    /* FAQ */
+    .faq{padding:80px 0;border-bottom:1px solid var(--line2)}
+    .faq-grid{display:grid;grid-template-columns:280px 1fr;gap:80px}
+    .faq-item{border-bottom:1px solid var(--line2)}
+    .faq-q{width:100%;background:none;border:none;color:var(--text);font-family:var(--mono);font-size:13px;text-align:left;padding:18px 0;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;transition:color .2s}
+    .faq-q:hover{color:var(--green)}
+    .faq-icon{font-family:var(--mono);font-size:18px;color:var(--muted);flex-shrink:0;transition:color .2s}
+    .faq-item.open .faq-icon{color:var(--green)}
+    .faq-a{font-size:14px;color:var(--muted);line-height:1.7;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s}
+    .faq-item.open .faq-a{max-height:200px;padding-bottom:18px}
+
+    /* CTA */
+    .cta-section{padding:100px 0;text-align:center;position:relative;overflow:hidden}
+    .cta-section::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(0,255,136,0.08) 0%,transparent 70%);pointer-events:none}
+    .cta-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--green);margin-bottom:20px}
+    .cta-title{font-family:var(--display);font-size:clamp(52px,9vw,110px);line-height:.9;letter-spacing:1px;margin-bottom:32px}
+    .cta-sub{font-size:17px;color:var(--muted);margin-bottom:48px;font-weight:300;max-width:500px;margin-left:auto;margin-right:auto}
+
+    footer{border-top:1px solid var(--line2);padding:28px;display:flex;align-items:center;justify-content:space-between;max-width:1140px;margin:0 auto;flex-wrap:wrap;gap:12px;position:relative;z-index:1}
+    .footer-logo{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--text);text-decoration:none}
+    .footer-logo em{font-style:normal;color:var(--green)}
+    footer p{font-family:var(--mono);font-size:10px;color:var(--muted2);letter-spacing:.5px}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .fade{opacity:0;animation:fadeUp .6s ease forwards}
+    .d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}.d4{animation-delay:.4s}.d5{animation-delay:.5s}
+
+    @media(max-width:900px){
+      .hero-inner{grid-template-columns:1fr;gap:40px}
+      .feat-grid{grid-template-columns:1fr}
+      .how-grid{grid-template-columns:1fr;gap:40px}
+      .chain-grid{grid-template-columns:1fr 1fr}
+      .pricing-grid{grid-template-columns:1fr;max-width:420px}
+      .faq-grid{grid-template-columns:1fr;gap:20px}
+      h1{font-size:clamp(52px,12vw,80px)}
+      footer{flex-direction:column;text-align:center;padding:24px 20px}
+      .nav-live{display:none}
+      .hero-actions{flex-direction:column}
+      .btn-primary,.btn-ghost{justify-content:center}
+    }
+    @media(max-width:480px){.wrap{padding:0 16px}.nav-inner{padding:12px 16px}}
+  </style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo">rif<em>rush</em><span class="logo-tag">// on-chain tracker</span></a>
+    <div class="nav-right">
+      <div class="nav-live"><span class="dot"></span> LIVE · 4 CHAINS</div>
+      <a href="https://t.me/PriceDropWest_bot" target="_blank" rel="noopener" class="nav-cta">OPEN BOT →</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-label fade d1">Wallet Intelligence · Real-Time</div>
+        <h1 class="fade d2">TRACK<br>EVERY<span class="acc">MOVE.</span></h1>
+        <p class="hero-sub fade d3">Whales move millions before the market reacts. Rifrush watches their wallets 24/7 across ETH, SOL, BSC and Base — and alerts you in Telegram the second it happens.</p>
+        <div class="hero-actions fade d4">
+          <a href="https://t.me/PriceDropWest_bot" target="_blank" rel="noopener" class="btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-1.97 9.281c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.94z"/></svg>
+            START TRACKING FREE
+          </a>
+          <a href="#pricing" class="btn-ghost">VIEW PLANS ↓</a>
+        </div>
+        <p class="hero-note fade d5">NO SIGNUP · <span>3 WALLETS FREE FOREVER</span> · INSTANT ALERTS</p>
+      </div>
+      <div class="terminal fade d3">
+        <div class="term-bar">
+          <div class="term-dot" style="background:#ff5f57"></div>
+          <div class="term-dot" style="background:#febc2e"></div>
+          <div class="term-dot" style="background:#28c840"></div>
+          <span class="term-title">RIFRUSH // LIVE FEED</span>
+          <span class="term-live">● LIVE</span>
+        </div>
+        <div class="term-body">
+          <div class="term-row"><span class="term-time">14:32:07</span><div class="term-event"><span class="cb eth">ETH</span> WHALE BUY · $PEPE<span class="addr">0x7f3a…d91c <span style="color:var(--green);font-size:9px">// insider</span></span></div><span class="term-amount buy">+$2.4M</span></div>
+          <div class="term-row"><span class="term-time">14:29:51</span><div class="term-event"><span class="cb sol">SOL</span> TRANSFER OUT<span class="addr">DKh7…9mNq <span style="color:var(--amber);font-size:9px">// your wallet</span></span></div><span class="term-amount move">84 SOL</span></div>
+          <div class="term-row"><span class="term-time">14:27:18</span><div class="term-event"><span class="cb bsc">BSC</span> LARGE SELL · $CAKE<span class="addr">0xb2f1…0043</span></div><span class="term-amount sell">−$890K</span></div>
+          <div class="term-row"><span class="term-time">14:21:03</span><div class="term-event"><span class="cb base">BASE</span> NEW POSITION · $BRETT<span class="addr">0xa9c3…ff12 <span style="color:var(--green);font-size:9px">// whale</span></span></div><span class="term-amount buy">+$340K</span></div>
+          <div class="term-row"><span class="term-time">14:18:44</span><div class="term-event"><span class="cb eth">ETH</span> EXIT · $ARB<span class="addr">0x44d8…2ab0</span></div><span class="term-amount sell">−$1.2M</span></div>
+        </div>
+        <div class="term-footer">
+          <span class="term-stat">EVENTS TODAY <span id="ev-count">2,847</span></span>
+          <span class="term-stat">WALLETS <span>12,441</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker">
+  <div class="ticker-inner">
+    <div class="ti">ETH <span class="v">$3,241</span> <span class="u">▲ 2.3%</span></div>
+    <div class="ti">SOL <span class="v">$187</span> <span class="u">▲ 4.1%</span></div>
+    <div class="ti">BNB <span class="v">$612</span> <span class="d">▼ 0.8%</span></div>
+    <div class="ti">TRACKED WALLETS <span class="v">12,441</span></div>
+    <div class="ti">ALERTS TODAY <span class="v u">2,847</span></div>
+    <div class="ti">CHAINS <span class="v">ETH · SOL · BSC · BASE</span></div>
+    <div class="ti">LATENCY <span class="v u">&lt; 30s</span></div>
+    <div class="ti">ETH <span class="v">$3,241</span> <span class="u">▲ 2.3%</span></div>
+    <div class="ti">SOL <span class="v">$187</span> <span class="u">▲ 4.1%</span></div>
+    <div class="ti">BNB <span class="v">$612</span> <span class="d">▼ 0.8%</span></div>
+    <div class="ti">TRACKED WALLETS <span class="v">12,441</span></div>
+    <div class="ti">ALERTS TODAY <span class="v u">2,847</span></div>
+    <div class="ti">CHAINS <span class="v">ETH · SOL · BSC · BASE</span></div>
+    <div class="ti">LATENCY <span class="v u">&lt; 30s</span></div>
+  </div>
+</div>
+
+
+<section class="pain">
+  <div class="wrap">
+    <div class="eyebrow">THE PROBLEM</div>
+    <h2 class="section-title">STOP BEING<br>LAST TO KNOW.</h2>
+    <div class="pain-grid">
+      <div class="pain-card bad">
+        <div class="pain-label red">// WITHOUT RIFRUSH</div>
+        <div class="pain-item"><span class="ic">❌</span> You find out about whale moves hours later — from Twitter</div>
+        <div class="pain-item"><span class="ic">❌</span> You manually check Etherscan every few hours like it's 2018</div>
+        <div class="pain-item"><span class="ic">❌</span> You buy the top because the pump already happened</div>
+        <div class="pain-item"><span class="ic">❌</span> You miss the exit signal when insiders quietly dump</div>
+        <div class="pain-item"><span class="ic">❌</span> You're always reacting. Nobody who reacts wins.</div>
+      </div>
+      <div class="pain-card good">
+        <div class="pain-label grn">// WITH RIFRUSH</div>
+        <div class="pain-item"><span class="ic">✅</span> Telegram pings you within 30 seconds of any whale move</div>
+        <div class="pain-item"><span class="ic">✅</span> You see accumulation signals before price reacts</div>
+        <div class="pain-item"><span class="ic">✅</span> You know when insiders are exiting — not after</div>
+        <div class="pain-item"><span class="ic">✅</span> 15 known whale wallets tracked for free, forever</div>
+        <div class="pain-item"><span class="ic">✅</span> You stop reacting and start anticipating.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="wrap">
+    <div class="eyebrow">CAPABILITIES</div>
+    <h2 class="section-title">WHAT WE<br>TRACK.</h2>
+    <div class="feat-grid">
+      <div class="feat"><div class="feat-num">01</div><span class="feat-icon">🐋</span><div class="feat-title">WHALE WATCHLIST</div><p class="feat-desc">Follow curated on-chain whales, VCs and insiders. See every buy, sell and transfer the moment it hits the chain.</p><span class="feat-tag">BUILT-IN WATCHLIST</span></div>
+      <div class="feat"><div class="feat-num">02</div><span class="feat-icon">👁️</span><div class="feat-title">CUSTOM WALLET TRACKING</div><p class="feat-desc">Paste any address and we watch it. Your own wallets, competitor wallets, alpha wallets from CT — any chain.</p><span class="feat-tag">ANY ADDRESS</span></div>
+      <div class="feat"><div class="feat-num">03</div><span class="feat-icon">⚡</span><div class="feat-title">INSTANT ALERTS</div><p class="feat-desc">Alerts in Telegram within seconds of confirmation. Speed is alpha — Free checks every 5 min, Hunter every 60s, Apex under 30s.</p><span class="feat-tag">FREE: 5 MIN</span><span class="feat-plan fp-hunter">HUNTER: 60S</span><span class="feat-plan fp-apex">APEX: &lt;30S</span></div>
+      <div class="feat"><div class="feat-num">04</div><span class="feat-icon">🔇</span><div class="feat-title">NOISE FILTER</div><p class="feat-desc">Free plan filters moves under $500 — no spam. Hunter lets you set your own threshold from $100. Only alerts that matter hit your phone.</p><span class="feat-tag">FREE: $500+</span><span class="feat-plan fp-hunter">HUNTER: CUSTOM</span></div>
+      <div class="feat"><div class="feat-num">05</div><span class="feat-icon">🧠</span><div class="feat-title">SMART SIGNALS</div><p class="feat-desc">Apex reads context — funds to exchange = 🔴 Possible Exit. Buy from cold wallet = 🟢 Accumulation. Not just data. Intelligence.</p><span class="feat-tag">APEX EXCLUSIVE</span></div>
+      <div class="feat"><div class="feat-num">06</div><span class="feat-icon">💰</span><div class="feat-title">PAY WITH CRYPTO</div><p class="feat-desc">No banks, no KYC, no Stripe. Pay in USDT, SOL or ETH directly from your wallet. Web3-native from day one.</p><span class="feat-tag">USDT · SOL · ETH</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="how">
+  <div class="wrap">
+    <div class="how-grid">
+      <div>
+        <div class="eyebrow">PROTOCOL</div>
+        <h2 class="section-title">THREE<br>STEPS.</h2>
+        <div class="steps">
+          <div class="step"><div class="step-num">01</div><div><div class="step-title">OPEN THE BOT</div><p class="step-desc">Hit /start in Telegram. No registration, no email. You're live in under 10 seconds.</p></div></div>
+          <div class="step"><div class="step-num">02</div><div><div class="step-title">ADD WALLETS TO WATCH</div><p class="step-desc">Paste any address or pick from our whale list. Choose chains and set your alert thresholds.</p></div></div>
+          <div class="step"><div class="step-num">03</div><div><div class="step-title">RECEIVE INSTANT ALERTS</div><p class="step-desc">Every significant move hits Telegram immediately. Tap the link to investigate on-chain.</p></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="alert-card buy main">
+          <div class="alert-head"><span class="alert-type buy">🟢 WHALE BUY DETECTED</span><span class="alert-time">just now</span></div>
+          <div class="alert-wallet"><span class="lbl">INSIDER</span>0x7f3a…d91c · <span class="cb eth">ETH</span></div>
+          <div class="alert-amount buy">+$2,400,000</div>
+          <div class="alert-sub">Bought 847B $PEPE · Uniswap V3 · gas 42 gwei</div>
+          <div class="alert-signal accumulate">🟢 ACCUMULATION — funds from cold storage</div>
+          <a href="#" onclick="return false" class="alert-btn">VIEW ON ETHERSCAN →</a>
+        </div>
+        <div class="alert-card move dimmed">
+          <div class="alert-head"><span class="alert-type move">🟡 LARGE TRANSFER</span><span class="alert-time">2 min ago</span></div>
+          <div class="alert-wallet">0xb2f1…9943 · <span class="cb bsc">BSC</span></div>
+          <div class="alert-amount move">240,000 USDT</div>
+          <div class="alert-sub">To Binance hot wallet</div>
+          <div class="alert-signal exit">🔴 POSSIBLE EXIT — moving to exchange</div>
+        </div>
+        <div class="alert-card sell dimmed">
+          <div class="alert-head"><span class="alert-type sell">🔴 LARGE SELL</span><span class="alert-time">5 min ago</span></div>
+          <div class="alert-wallet">DKh7…9mNq · <span class="cb sol">SOL</span></div>
+          <div class="alert-amount sell">−$890,000</div>
+          <div class="alert-sub">Sold $BONK · Jupiter · 3 transactions</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="chains">
+  <div class="wrap">
+    <div class="chains-label">// SUPPORTED NETWORKS</div>
+    <div class="chain-grid">
+      <div class="chain-card"><div class="chain-logo">⟠</div><div class="chain-name" style="color:#627eea">ETHEREUM</div><div class="chain-stat">ERC-20 · ERC-721 · DEX</div></div>
+      <div class="chain-card"><div class="chain-logo">◎</div><div class="chain-name" style="color:#9945ff">SOLANA</div><div class="chain-stat">SPL · Raydium · Jupiter</div></div>
+      <div class="chain-card"><div class="chain-logo">⬡</div><div class="chain-name" style="color:#f0b90b">BNB CHAIN</div><div class="chain-stat">BEP-20 · PancakeSwap</div></div>
+      <div class="chain-card"><div class="chain-logo">🔵</div><div class="chain-name" style="color:#0052ff">BASE</div><div class="chain-stat">EVM · Aerodrome · Uniswap</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="wrap">
+    <div class="eyebrow">PRICING</div>
+    <h2 class="section-title">SIMPLE<br>PLANS.</h2>
+    <div class="pricing-grid">
+      <div class="plan">
+        <span class="plan-tag">// FREE TIER</span>
+        <div class="plan-name">SCOUT</div>
+        <div class="plan-price">$0<span class="per">/mo</span></div>
+        <p class="plan-note">Forever free. No card. No KYC.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><strong>3 wallets</strong> tracked</li>
+          <li>Checks every <strong>5 minutes</strong></li>
+          <li>ETH + SOL only</li>
+          <li>Basic buy / sell alerts</li>
+          <li>Whale watchlist access</li>
+        </ul>
+        <a href="https://t.me/PriceDropWest_bot" target="_blank" rel="noopener" class="plan-btn plan-btn-outline">START FREE →</a>
+      </div>
+      <div class="plan featured">
+        <span class="plan-tag">// MOST POPULAR ★</span>
+        <div class="plan-name">HUNTER</div>
+        <div class="plan-price">$19<span class="per">/mo</span></div>
+        <p class="plan-note">Pay in USDT, SOL or ETH. Cancel anytime.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><strong>25 wallets</strong> tracked</li>
+          <li>Checks every <strong>60 seconds</strong></li>
+          <li>All 4 chains</li>
+          <li>Smart filters + thresholds</li>
+          <li>Wallet labels & notes</li>
+          <li>Priority alert delivery</li>
+        </ul>
+        <a href="https://t.me/PriceDropWest_bot" target="_blank" rel="noopener" class="plan-btn plan-btn-solid">UPGRADE → $19/MO</a>
+      </div>
+      <div class="plan">
+        <span class="plan-tag">// MAXIMUM ALPHA</span>
+        <div class="plan-name">APEX</div>
+        <div class="plan-price">$49<span class="per">/mo</span></div>
+        <p class="plan-note">For serious on-chain researchers.</p>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><strong>Unlimited</strong> wallets</li>
+          <li><strong>&lt; 30 second</strong> real-time alerts</li>
+          <li>All chains + new chains first</li>
+          <li>Advanced filters + portfolio view</li>
+          <li>Copy trading signals</li>
+          <li>Everything in Hunter</li>
+        </ul>
+        <a href="https://t.me/PriceDropWest_bot" target="_blank" rel="noopener" class="plan-btn plan-btn-outline">GO APEX →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faq">
+  <div class="wrap">
+    <div class="faq-grid">
+      <div>
+        <div class="eyebrow">FAQ</div>
+        <h2 class="section-title" style="font-size:clamp(40px,5vw,64px)">GOT<br>QUESTIONS?</h2>
+        <p style="font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.7;margin-top:20px">Everything about Rifrush. Can't find your answer? Message us inside the bot.</p>
+      </div>
+      <div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How do I pay without a credit card?<span class="faq-icon">+</span></button><div class="faq-a">No card needed. We accept USDT, TON, BTC and ETH via CryptoBot — all inside Telegram. Tap Upgrade in the bot, choose your plan, pay in one tap. Your plan activates automatically. No banks, no KYC, no waiting.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Which wallets can I track?<span class="faq-icon">+</span></button><div class="faq-a">Any public address on ETH, Solana, BNB Chain or Base. You can also choose from our curated whale and insider watchlist — we maintain known high-alpha wallets.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How fast are the alerts really?<span class="faq-icon">+</span></button><div class="faq-a">Free tier: up to 5 minutes. Hunter: ~60 seconds. Apex: under 30 seconds from transaction confirmation to your Telegram message.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What are Smart Signals on Apex?<span class="faq-icon">+</span></button><div class="faq-a">Apex reads the context of each transaction. Funds moving to a known exchange = 🔴 Possible Exit. Whale pulling from cold storage to buy = 🟢 Accumulation. It's not just raw data — it's interpreted intelligence that tells you what the move likely means.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Will I get spammed with tiny transactions?<span class="faq-icon">+</span></button><div class="faq-a">No. Scout filters moves under $500 automatically. Hunter lets you set your own threshold from $100. Apex from $1. You only get alerted when it actually matters.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Is my data private?<span class="faq-icon">+</span></button><div class="faq-a">We store only your Telegram ID and the wallet addresses you choose to track. All tracked wallets are public on-chain data. No private keys, no personal info ever.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Can I cancel anytime?<span class="faq-icon">+</span></button><div class="faq-a">Yes. Type /cancel in the bot and your subscription stops at period end. No questions, no forms, no waiting.</div></div>
+        <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">More chains coming?<span class="faq-icon">+</span></button><div class="faq-a">Yes — Arbitrum, Polygon and Avalanche are next. Apex users get new chains first, automatically.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="wrap">
+    <div class="cta-eyebrow">// START NOW · FREE</div>
+    <h2 class="cta-title">STOP<br>MISSING<br><span style="color:var(--green)">MOVES.</span></h2>
+    <p class="cta-sub">3 custom wallets + 15 top whales tracked free forever. No credit card. No KYC. Open the bot and go.</p>
+    <a href="https://t.me/PriceDropWest_bot" target="_blank" rel="noopener" class="btn-primary" style="font-size:14px;padding:20px 36px">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-1.97 9.281c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.94z"/></svg>
+      OPEN RIFRUSH BOT — FREE
+    </a>
+    <p class="hero-note" style="margin-top:24px">TAKES 10 SECONDS · <span>NO REGISTRATION REQUIRED</span></p>
+  </div>
+</section>
+
+<footer>
+  <a href="/" class="footer-logo">rif<em>rush</em></a>
+  <p>© 2026 RIFRUSH · ON-CHAIN WALLET INTELLIGENCE</p>
+</footer>
+
+<script>
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.feat,.plan,.step,.chain-card,.faq-item,.alert-card,.pain-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = 'opacity .5s ease, transform .5s ease';
+    io.observe(el);
+  });
+
+  // Live terminal simulation
+  const AMOUNTS = ['+$1.8M','+$340K','−$2.1M','+$890K','82 SOL','−$670K','+$4.2M','120 ETH'];
+  const TOKENS  = ['$PEPE','$WIF','$BONK','$ARB','$BRETT','$DOGE','$SHIB','$MOG'];
+  const CHAINS  = [['eth','ETH'],['sol','SOL'],['bsc','BSC'],['base','BASE']];
+  const TYPES   = [['buy','WHALE BUY'],['sell','LARGE SELL'],['move','TRANSFER']];
+  const rand    = a => a[Math.floor(Math.random()*a.length)];
+  let evCount = 2847;
+
+  setInterval(() => {
+    const rows = document.querySelectorAll('.term-row');
+    if (!rows.length) return;
+    const last = rows[rows.length - 1];
+    const now = new Date();
+    const t = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+    const [tc, tl] = rand(TYPES);
+    const [cc, cl] = rand(CHAINS);
+    const amount = rand(AMOUNTS);
+    const token  = rand(TOKENS);
+    const addr   = `0x${Math.random().toString(16).slice(2,6)}…${Math.random().toString(16).slice(2,6)}`;
+
+    last.querySelector('.term-time').textContent = t;
+    const cb = last.querySelector('.cb');
+    cb.className = `cb ${cc}`; cb.textContent = cl;
+    const ev = last.querySelector('.term-event');
+    ev.childNodes[1].textContent = ` ${tl} · ${token}`;
+    ev.querySelector('.addr').textContent = addr;
+    const amt = last.querySelector('.term-amount');
+    amt.textContent = amount; amt.className = `term-amount ${tc}`;
+
+    const body = document.querySelector('.term-body');
+    body.insertBefore(last, body.firstChild);
+    last.style.transition = 'none';
+    last.style.opacity = '0'; last.style.transform = 'translateX(-8px)';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        last.style.transition = 'opacity .3s, transform .3s';
+        last.style.opacity = '1'; last.style.transform = 'translateX(0)';
+      });
+    });
+    evCount++;
+    const el = document.getElementById('ev-count');
+    if (el) el.textContent = evCount.toLocaleString();
+  }, 2800);
+</script>
+</body>
+</html>
